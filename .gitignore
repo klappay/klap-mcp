@@ -1,0 +1,14 @@
+node_modules
+dist
+docs/.vitepress/dist
+docs/.vitepress/cache
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
+.claude/settings.local.json
+.claude/scheduled_tasks.lock
+
+# graft's local graph cache — regenerable, not committed (run `graft build`).
+/graft/

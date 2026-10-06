@@ -1,0 +1,71 @@
+{
+  "name": "@klappay/mcp",
+  "version": "1.0.0",
+  "license": "MIT",
+  "description": "Local stdio MCP server for the Klap Core API — lets an AI assistant read charges, webhooks, networks and metrics, and (in test mode) create charges and simulate sandbox events, using the key `klap login` already stored on your machine.",
+  "keywords": ["klap", "klappay", "mcp", "model-context-protocol", "crypto", "payments", "web3"],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klappay/klap-mcp.git"
+  },
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@10.33.0",
+  "type": "module",
+  "bin": {
+    "klap-mcp": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "docs",
+    "!docs/.vitepress",
+    "!docs/index.md",
+    "!docs/public/CNAME"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsup",
+    "dev": "tsup --watch",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "test": "vitest run",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "pnpm build && changeset publish",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "@klappay/cli": "^1.4.0",
+    "@klappay/node": "^5.1.4",
+    "@klappay/types": "6.0.0",
+    "@modelcontextprotocol/sdk": "1.32.1",
+    "zod": "3.25.76"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.0",
+    "@changesets/cli": "^2.31.1",
+    "@commitlint/cli": "^19.5.0",
+    "@commitlint/config-conventional": "^19.5.0",
+    "@types/node": "^20.16.0",
+    "husky": "^9.1.0",
+    "lint-staged": "^15.2.0",
+    "tsup": "^8.3.0",
+    "typescript": "^5.6.0",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-llms": "^1.14.0",
+    "vitest": "^3.2.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": ["@biomejs/biome", "esbuild"]
+  }
+}

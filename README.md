@@ -41,8 +41,8 @@ you can turn live off without touching test.
 ### Claude Code
 
 ```sh
-claude mcp add klap-test -- npx -y @klappay/mcp@0.1.0
-claude mcp add klap-live -e KLAP_ENV=live -- npx -y @klappay/mcp@0.1.0
+claude mcp add klap-test -- npx -y @klappay/mcp@1.0.0
+claude mcp add klap-live -e KLAP_ENV=live -- npx -y @klappay/mcp@1.0.0
 ```
 
 ### Claude Desktop (`claude_desktop_config.json`) and Cursor (`~/.cursor/mcp.json`)
@@ -54,11 +54,11 @@ Both use the same shape:
   "mcpServers": {
     "klap-test": {
       "command": "npx",
-      "args": ["-y", "@klappay/mcp@0.1.0"]
+      "args": ["-y", "@klappay/mcp@1.0.0"]
     },
     "klap-live": {
       "command": "npx",
-      "args": ["-y", "@klappay/mcp@0.1.0"],
+      "args": ["-y", "@klappay/mcp@1.0.0"],
       "env": { "KLAP_ENV": "live" }
     }
   }

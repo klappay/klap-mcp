@@ -19,7 +19,7 @@ You can store a live key the same way later; both slots live side by side.
 Claude Code:
 
 ```sh
-claude mcp add klap-test -- npx -y @klappay/mcp@0.1.0
+claude mcp add klap-test -- npx -y @klappay/mcp@1.0.0
 ```
 
 Claude Desktop (`claude_desktop_config.json`) or Cursor (`~/.cursor/mcp.json`):
@@ -29,7 +29,7 @@ Claude Desktop (`claude_desktop_config.json`) or Cursor (`~/.cursor/mcp.json`):
   "mcpServers": {
     "klap-test": {
       "command": "npx",
-      "args": ["-y", "@klappay/mcp@0.1.0"]
+      "args": ["-y", "@klappay/mcp@1.0.0"]
     }
   }
 }
@@ -57,7 +57,7 @@ Ask the assistant things like:
 Add a second, separate server with `KLAP_ENV=live`. It is read-only:
 
 ```sh
-claude mcp add klap-live -e KLAP_ENV=live -- npx -y @klappay/mcp@0.1.0
+claude mcp add klap-live -e KLAP_ENV=live -- npx -y @klappay/mcp@1.0.0
 ```
 
 Only add `KLAP_MCP_ALLOW_LIVE_WRITES=1` if you really want the assistant to

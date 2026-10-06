@@ -68,7 +68,7 @@ your MCP client's config file, so prefer `klap login` on a workstation:
   "mcpServers": {
     "klap-local": {
       "command": "npx",
-      "args": ["-y", "@klappay/mcp@0.1.0"],
+      "args": ["-y", "@klappay/mcp@1.0.0"],
       "env": {
         "KLAP_API_KEY": "klap_test_...",
         "KLAP_BASE_URL": "http://localhost:3000"

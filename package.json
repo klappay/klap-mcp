@@ -1,6 +1,6 @@
 {
   "name": "@klappay/mcp",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "Local stdio MCP server for the Klap Core API — lets an AI assistant read charges, webhooks, networks and metrics, and (in test mode) create charges and simulate sandbox events, using the key `klap login` already stored on your machine.",
   "keywords": ["klap", "klappay", "mcp", "model-context-protocol", "crypto", "payments", "web3"],

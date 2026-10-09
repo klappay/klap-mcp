@@ -12,11 +12,11 @@ importers:
         specifier: ^1.4.0
         version: 1.4.0
       '@klappay/node':
-        specifier: ^5.1.4
-        version: 5.1.4
+        specifier: ^5.1.5
+        version: 5.1.5
       '@klappay/types':
-        specifier: 6.0.0
-        version: 6.0.0
+        specifier: 6.0.1
+        version: 6.0.1
       '@modelcontextprotocol/sdk':
         specifier: 1.32.1
         version: 1.32.1(zod@3.25.76)
@@ -861,12 +861,12 @@ packages:
     engines: {node: '>=24'}
     hasBin: true
 
-  '@klappay/node@5.1.4':
-    resolution: {integrity: sha512-iqVnIUVJ608zndBpncZ9QuuKGDUKy5OVH9X/yFubTU0FNgaDdSJYkmKzkkTSdy7v+DfUMbZZWwqBEu0ARIimqA==}
+  '@klappay/node@5.1.5':
+    resolution: {integrity: sha512-Y3GzqUavSydGP3DiSSce4Jv8lPhEHqaTp00AN6oBOrlPds2C4N1/ABqqtMhUn4sDdg0tIsiyxGw0pvwjiaXv4g==}
     engines: {node: '>=24'}
 
-  '@klappay/types@6.0.0':
-    resolution: {integrity: sha512-83rSmHcnZnaYBNA8Mee4aX6MVyCGHtj2U32WxhUjeErdpW6PQm97fkVugZ85TYW05+WF719qy+R9JOEuubk4uQ==}
+  '@klappay/types@6.0.1':
+    resolution: {integrity: sha512-MHSk4oWjLDUsDctCbloDQugM8iPKOeO3yvHDvGb1vj5YVkV+m8KNAG5MvcxTvHOlUk48km4U4Fa4pnO3SNV/KQ==}
     engines: {node: '>=24'}
 
   '@manypkg/find-root@1.1.0':
@@ -3703,16 +3703,16 @@ snapshots:
 
   '@klappay/cli@1.4.0':
     dependencies:
-      '@klappay/node': 5.1.4
-      '@klappay/types': 6.0.0
+      '@klappay/node': 5.1.5
+      '@klappay/types': 6.0.1
       commander: 13.1.0
       picocolors: 1.1.1
 
-  '@klappay/node@5.1.4':
+  '@klappay/node@5.1.5':
     dependencies:
-      '@klappay/types': 6.0.0
+      '@klappay/types': 6.0.1
 
-  '@klappay/types@6.0.0':
+  '@klappay/types@6.0.1':
     dependencies:
       zod: 3.25.76
 

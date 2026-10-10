@@ -45,7 +45,7 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@klappay/cli": "^1.4.2",
+    "@klappay/cli": "^1.4.3",
     "@klappay/node": "^5.2.0",
     "@klappay/types": "6.1.0",
     "@modelcontextprotocol/sdk": "1.32.1",

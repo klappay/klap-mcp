@@ -79,6 +79,19 @@ const routes = new Map<string, Route>([
   ],
   ['POST /v1/charges', { status: 201, body: CHARGE }],
   [
+    'POST /v1/charges/ch_abc123/check',
+    {
+      status: 200,
+      body: {
+        ...CHARGE,
+        transactionSender: '0x0000000000000000000000000000000000000Bad',
+        tokenSenders: ['0x3a02D938bD381c0f4C024d277B9FF61Adc812207'],
+        userOperationSenders: [],
+        confirmationProgress: null,
+      },
+    },
+  ],
+  [
     'GET /v1/charges/ch_abc123/timeline',
     {
       status: 200,
@@ -370,6 +383,31 @@ describe('tool calls', () => {
       },
     })
     expect(JSON.stringify(result.content)).not.toContain('injected')
+  })
+
+  it('charges_check returns payer evidence and strips metadata and unknown fields', async () => {
+    const txHash = `0x${'a'.repeat(64)}`
+    const result = await (await connect('test')).callTool({
+      name: 'charges_check',
+      arguments: { id: 'ch_abc123', txHash, network: 'base' },
+    })
+    expect(requests[0]).toMatchObject({
+      method: 'POST',
+      path: '/v1/charges/ch_abc123/check',
+      body: { txHash, network: 'base' },
+    })
+    expect(result.structuredContent).toMatchObject({
+      environment: 'test',
+      charge: {
+        id: 'ch_abc123',
+        transactionSender: '0x0000000000000000000000000000000000000Bad',
+        tokenSenders: ['0x3a02D938bD381c0f4C024d277B9FF61Adc812207'],
+        userOperationSenders: [],
+      },
+    })
+    const text = JSON.stringify(result.content)
+    expect(text).not.toContain('payer@example.com')
+    expect(text).not.toContain('injected')
   })
 
   it('charges_check rejects txHash without network before any request is sent', async () => {

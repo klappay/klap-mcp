@@ -1,5 +1,15 @@
 # @klappay/mcp
 
+## 1.2.0
+
+### Minor Changes
+
+- a37c34b: `metrics_query` no longer asks for `query.environment`: the server fills in its own environment. Before, a query without it failed validation, and one with the other environment failed with `environment_mismatch` from the API. An `environment` passed anyway is ignored.
+
+### Patch Changes
+
+- a9b1b77: Bump `@klappay/cli` to 1.4.3, so the `@klappay/cli/credentials` module the server reads `~/.klap/config.json` with matches the latest CLI. Install and docs examples now pin `@klappay/mcp@1.1.0`.
+
 ## 1.1.0
 
 ### Minor Changes

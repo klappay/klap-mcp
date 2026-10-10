@@ -105,6 +105,14 @@ Annotations: `destructiveHint: false`, `idempotentHint: false`.
 Asks the API to re-check the charge on-chain now. Returns `{ charge }`
 (`CheckChargeResponseSchema` without `metadata`).
 
+When `txHash` actually paid the charge, the result carries on-chain
+evidence of who paid: `transactionSender` (the transaction's own
+`from`), `tokenSenders` (the `from` of each paying accepted-token
+transfer, which covers a wallet behind a gas-sponsoring relayer) and
+`userOperationSenders` (the ERC-4337 account whose own user operation
+paid). This is evidence, not identity. Both arrays are `[]` whenever
+`transactionSender` is `null`.
+
 Annotations: `destructiveHint: false`, `idempotentHint: true`.
 
 ### `webhooks_retry_delivery`

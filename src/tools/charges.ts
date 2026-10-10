@@ -36,10 +36,6 @@ const CheckChargeInputSchema = CheckChargeRequestSchema.innerType()
   .extend({ id: ChargeIdSchema })
   .strict()
 
-function validationMessage(error: z.ZodError): string {
-  return error.issues.map((issue) => issue.message).join('; ')
-}
-
 export const chargeTools: ToolDefinition[] = [
   {
     name: 'charges_get',
@@ -129,7 +125,7 @@ export const chargeTools: ToolDefinition[] = [
         ({ id, ...hint }) =>
           runTool(environment, async () => {
             const request = CheckChargeRequestSchema.safeParse(hint)
-            if (!request.success) throw new ToolInputError(validationMessage(request.error))
+            if (!request.success) throw ToolInputError.fromZod(request.error)
             const checked = await client.charges.check(id, request.data)
             return { charge: CheckResponseWithoutMetadataSchema.parse(checked) }
           }),

@@ -131,6 +131,17 @@ const routes = new Map<string, Route>([
     'POST /v1/sandbox/charges/ch_abc123/trigger',
     { status: 200, body: { ...CHARGE, status: 'confirmed' } },
   ],
+  [
+    'POST /v1/metrics/query',
+    {
+      status: 200,
+      body: {
+        data: [{ count: 17 }],
+        meta: { resource: 'charges', environment: 'live', rowCount: 1, truncated: false },
+        injected: 1,
+      },
+    },
+  ],
 ])
 
 const requests: RecordedRequest[] = []
@@ -458,6 +469,58 @@ describe('tool calls', () => {
       environment: 'live',
       acceptedPayments: [{ token: 'USDC', network: 'base' }],
     })
+  })
+
+  const METRICS_QUERY = {
+    resource: 'charges',
+    metrics: [{ aggregation: 'count' }],
+    dateRange: {
+      field: 'createdAt',
+      from: '2026-01-01T00:00:00.000Z',
+      to: '2026-01-08T00:00:00.000Z',
+    },
+  }
+
+  it.each(['test', 'live'] as const)(
+    'metrics_query sends the %s server environment without the model passing it',
+    async (environment) => {
+      const result = await (await connect(environment)).callTool({
+        name: 'metrics_query',
+        arguments: { query: METRICS_QUERY },
+      })
+      expect(requests[0]).toMatchObject({
+        method: 'POST',
+        path: '/v1/metrics/query',
+        body: { ...METRICS_QUERY, environment },
+      })
+      expect(result.structuredContent).toMatchObject({ environment, data: [{ count: 17 }] })
+      expect(JSON.stringify(result.content)).not.toContain('injected')
+    },
+  )
+
+  it('metrics_query ignores an environment the model passes and uses the server one', async () => {
+    await (await connect('test')).callTool({
+      name: 'metrics_query',
+      arguments: { query: { ...METRICS_QUERY, environment: 'live' } },
+    })
+    expect(requests[0]?.body).toMatchObject({ environment: 'test' })
+  })
+
+  it('metrics_query rejects a dateRange that ends before it starts before any request is sent', async () => {
+    const result = await (await connect('test')).callTool({
+      name: 'metrics_query',
+      arguments: {
+        query: {
+          ...METRICS_QUERY,
+          dateRange: { ...METRICS_QUERY.dateRange, from: METRICS_QUERY.dateRange.to },
+        },
+      },
+    })
+    expect(result.structuredContent).toMatchObject({
+      environment: 'test',
+      error: { code: 'validation_error', message: expect.stringContaining('dateRange.from') },
+    })
+    expect(requests).toHaveLength(0)
   })
 
   it('sandbox_trigger posts the event and returns the parsed charge', async () => {

@@ -14,6 +14,10 @@ export class ToolInputError extends Error {
     super(message)
     this.name = 'ToolInputError'
   }
+
+  static fromZod(error: ZodError): ToolInputError {
+    return new ToolInputError(error.issues.map((issue) => issue.message).join('; '))
+  }
 }
 
 function toResult(payload: ToolPayload, isError: boolean): CallToolResult {

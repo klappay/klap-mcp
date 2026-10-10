@@ -77,8 +77,10 @@ No input. Returns `{ acceptedPayments }` (`CapabilitiesSchema`): the
 ### `metrics_query`
 
 Input `{ query }`, where `query` is a `MetricsQuerySchema` request
-(resource, metrics, `dateRange`, optional filters/groupBy/limit). Returns
-the `MetricsQueryResultSchema` fields (`data` rows and `meta`).
+(resource, metrics, `dateRange`, optional filters/groupBy/limit) without
+`environment`: the server always fills in its own environment, so a query
+can never ask for the other environment's data. Returns the
+`MetricsQueryResultSchema` fields (`data` rows and `meta`).
 
 ## Write tools
 

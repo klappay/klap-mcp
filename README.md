@@ -11,8 +11,10 @@ the key [`klap login`](https://github.com/klappay/klap-cli) already stored in
 
 What the assistant can do with it:
 
-- **Read**: look up a charge and its timeline, list webhooks and their
-  deliveries, list accepted `(token, network)` pairs, run metrics queries.
+- **Read**: look up or list charges and a charge's timeline, inspect the
+  Safe transaction an escrow release/refund would execute, list webhooks
+  and their deliveries, list accepted `(token, network)` pairs, run
+  metrics queries.
 - **Test mode**: create charges, re-check them on-chain, retry webhook
   deliveries and push a sandbox charge through its payment states.
 - **Live mode**: read-only by default. Writes are only registered when
@@ -86,7 +88,10 @@ An empty value counts as unset. Full rules: [Configuration](./docs/configuration
 |---|---|---|---|
 | `klap_status` | yes | yes | yes |
 | `charges_get` | yes | yes | yes |
+| `charges_list` | yes | yes | yes |
 | `charges_timeline` | yes | yes | yes |
+| `charges_prepare_release` | yes | yes | yes |
+| `charges_prepare_refund` | yes | yes | yes |
 | `webhooks_list` | yes | yes | yes |
 | `webhooks_list_deliveries` | yes | yes | yes |
 | `networks_get` | yes | yes | yes |
@@ -108,7 +113,8 @@ described in [Tools](./docs/tools.md).
 - API responses are filtered through the published `@klappay/types`
   schemas before the assistant sees them; unknown fields are dropped and a
   charge's `metadata` is left out unless asked for.
-- Not available at all: escrow `release`/`refund`, webhook
+- Not available at all: escrow `release`/`refund` (only their read-only
+  `prepare` step is), webhook
   create/delete/rotate-secret, recipient changes, live event streams, QR
   codes and swap quotes.
 

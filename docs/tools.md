@@ -48,9 +48,42 @@ Returns `{ charge }` (`ChargeSchema`). The charge's `metadata` object
 (free-form merchant data, which may contain customer details) is left out
 unless `includeMetadata` is `true`.
 
+### `charges_list`
+
+| Input | |
+|---|---|
+| `status` | optional `ChargeStatusSchema` value |
+| `token` / `network` | optional, filter on the pair actually paid (`paidWith`), not the accepted ones |
+| `since` | optional ISO 8601 timestamp, filters on `createdAt` |
+| `isOverpaid` | optional `"true"` or `"false"` |
+| `limit` | 1–100, default 20 |
+| `cursor` | the previous page's `nextCursor` |
+| `includeMetadata` | boolean, default `false` |
+
+Input is `ListChargesSchema` without `environment`: the server always
+sends its own, so a list can never return the other environment's
+charges, and passing `environment` is rejected. Returns
+`{ data, nextCursor, hasMore }` (`PaginatedChargesSchema`), newest first,
+with each charge's `metadata` left out unless `includeMetadata` is `true`.
+
 ### `charges_timeline`
 
 Input `{ id }`. Returns `{ chargeId, events }` (`TimelineEventSchema[]`).
+
+### `charges_prepare_release` / `charges_prepare_refund`
+
+Input `{ id }` of an escrow charge. Returns `{ chargeId, transaction }`
+(`EscrowSafeTransactionSchema`): the exact Safe transaction the release
+or refund would execute, with destination, token, amount in base units,
+chain id, Safe nonce, `safeTxHash` and the EIP-712 `typedData` the
+escrow's releaser signs. It is only valid while the escrow's balance is
+unchanged.
+
+These are read-only: nothing is signed or submitted, and `release`/
+`refund` themselves are not available through this server (see
+[Security](./security.md#excluded-on-purpose)). The API key needs the
+`charges:write` scope even though the call changes nothing. API errors
+such as `422 escrow_safe_mismatch` come back as a normal error result.
 
 ### `webhooks_list`
 

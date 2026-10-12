@@ -1,14 +1,18 @@
+import type { KlapClient } from '@klappay/node'
 import {
   ChargeSchema,
   CheckChargeRequestSchema,
   CheckChargeResponseSchema,
   CreateChargeSchema,
+  EscrowSafeTransactionSchema,
+  ListChargesSchema,
+  PaginatedChargesSchema,
   TimelineEventSchema,
 } from '@klappay/types'
 import { z } from 'zod'
 import { ChargeIdSchema } from '../ids'
 import { ToolInputError, runTool } from '../result'
-import { ChargeWithoutMetadataSchema } from './charge-output'
+import { ChargeWithoutMetadataSchema, PaginatedChargesWithoutMetadataSchema } from './charge-output'
 import type { ToolDefinition } from './definition'
 
 const CheckResponseWithoutMetadataSchema = CheckChargeResponseSchema.omit({ metadata: true })
@@ -18,16 +22,19 @@ export const CreateChargeToolInputSchema = CreateChargeSchema.innerType()
   .omit({ escrow: true, redirectUrl: true })
   .strict()
 
+const IncludeMetadataSchema = z
+  .boolean()
+  .default(false)
+  .describe(
+    "Include each charge's free-form `metadata` object (merchant-supplied data, may hold customer details). Omitted unless true.",
+  )
+
 const GetChargeInputSchema = z
-  .object({
-    id: ChargeIdSchema,
-    includeMetadata: z
-      .boolean()
-      .default(false)
-      .describe(
-        "Include the charge's free-form `metadata` object (merchant-supplied data, may hold customer details). Omitted unless true.",
-      ),
-  })
+  .object({ id: ChargeIdSchema, includeMetadata: IncludeMetadataSchema })
+  .strict()
+
+const ListChargesInputSchema = ListChargesSchema.omit({ environment: true })
+  .extend({ includeMetadata: IncludeMetadataSchema })
   .strict()
 
 const ChargeIdInputSchema = z.object({ id: ChargeIdSchema }).strict()
@@ -35,6 +42,33 @@ const ChargeIdInputSchema = z.object({ id: ChargeIdSchema }).strict()
 const CheckChargeInputSchema = CheckChargeRequestSchema.innerType()
   .extend({ id: ChargeIdSchema })
   .strict()
+
+function escrowPrepareTool(
+  action: 'release' | 'refund',
+  prepare: (client: KlapClient, id: string) => Promise<unknown>,
+): ToolDefinition {
+  const name = `charges_prepare_${action}`
+  return {
+    name,
+    access: 'read',
+    register(server, { client, environment }) {
+      server.registerTool(
+        name,
+        {
+          title: `Prepare escrow ${action}`,
+          description: `Show the exact Safe transaction an escrow ${action} of this charge would execute: destination, token, amount in base units, chain id, Safe nonce, safeTxHash and the EIP-712 typedData the escrow releaser must sign. Read-only: it signs and submits nothing, and the ${action} itself is not available through this server. Valid only while the escrow's balance is unchanged.`,
+          inputSchema: ChargeIdInputSchema,
+          annotations: { readOnlyHint: true, openWorldHint: true },
+        },
+        ({ id }) =>
+          runTool(environment, async () => ({
+            chargeId: id,
+            transaction: EscrowSafeTransactionSchema.parse(await prepare(client, id)),
+          })),
+      )
+    },
+  }
+}
 
 export const chargeTools: ToolDefinition[] = [
   {
@@ -55,6 +89,30 @@ export const chargeTools: ToolDefinition[] = [
             const charge = await client.charges.get(id)
             const schema = includeMetadata ? ChargeSchema : ChargeWithoutMetadataSchema
             return { charge: schema.parse(charge) }
+          }),
+      )
+    },
+  },
+  {
+    name: 'charges_list',
+    access: 'read',
+    register(server, { client, environment }) {
+      server.registerTool(
+        'charges_list',
+        {
+          title: 'List charges',
+          description:
+            "List this environment's charges, newest first, optionally filtered by status, paid token/network, creation time (since) or isOverpaid. Paginate with limit and the previous page's nextCursor. `metadata` is left out unless includeMetadata is true.",
+          inputSchema: ListChargesInputSchema,
+          annotations: { readOnlyHint: true, openWorldHint: true },
+        },
+        ({ includeMetadata, ...filter }) =>
+          runTool(environment, async () => {
+            const page = await client.charges.list({ ...filter, environment })
+            const schema = includeMetadata
+              ? PaginatedChargesSchema
+              : PaginatedChargesWithoutMetadataSchema
+            return schema.parse(page)
           }),
       )
     },
@@ -132,4 +190,6 @@ export const chargeTools: ToolDefinition[] = [
       )
     },
   },
+  escrowPrepareTool('release', (client, id) => client.charges.prepareRelease(id)),
+  escrowPrepareTool('refund', (client, id) => client.charges.prepareRefund(id)),
 ]

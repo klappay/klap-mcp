@@ -35,7 +35,7 @@ independently.
 
 | Not exposed | Why |
 |---|---|
-| Escrow `release` / `refund` | They move funds out of a charge. That stays a deliberate human action. |
+| Escrow `release` / `refund` | They move funds out of a charge. That stays a deliberate human action. `charges_prepare_release`/`charges_prepare_refund` only show the Safe transaction the releaser would sign; nothing in this server signs or submits it. |
 | Webhook create / delete / rotate secret | Pointing webhooks somewhere else, or rotating a secret, can silently break or redirect your integration. |
 | Recipient (payout) changes | They decide where money goes. |
 | Live event streams (`watch`) | Long-lived streams don't fit a request/response tool. |
@@ -47,8 +47,8 @@ independently.
   the schema doesn't define. A response that doesn't fit the schema is
   reported as `unexpected_response`, not forwarded.
 - A charge's `metadata` (free-form merchant data, possibly customer
-  details) is only included when `charges_get` is called with
-  `includeMetadata: true`.
+  details) is only included when `charges_get` or `charges_list` is
+  called with `includeMetadata: true`.
 - Webhook URLs are reduced to origin + path, removing credentials and
   tokens people often put in a URL's userinfo or query string.
 - Unexpected errors return a generic message; details go to stderr for you,

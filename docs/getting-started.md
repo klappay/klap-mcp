@@ -51,6 +51,7 @@ Ask the assistant things like:
   timeline." (`sandbox_trigger`, `charges_timeline`)
 - "Which of my webhooks failed deliveries recently?" (`webhooks_list`,
   `webhooks_list_deliveries`)
+- "List my pending charges from the last day." (`charges_list`)
 
 ## 4. Add live (optional)
 

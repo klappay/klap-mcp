@@ -9,14 +9,14 @@ importers:
   .:
     dependencies:
       '@klappay/cli':
-        specifier: ^1.4.3
-        version: 1.4.3
+        specifier: ^1.6.0
+        version: 1.6.0
       '@klappay/node':
-        specifier: ^5.2.0
-        version: 5.2.0
+        specifier: ^5.3.0
+        version: 5.3.0
       '@klappay/types':
-        specifier: 6.1.0
-        version: 6.1.0
+        specifier: 6.2.0
+        version: 6.2.0
       '@modelcontextprotocol/sdk':
         specifier: 1.32.1
         version: 1.32.1(zod@3.25.76)
@@ -856,17 +856,17 @@ packages:
   '@jridgewell/trace-mapping@0.3.31':
     resolution: {integrity: sha512-zzNR+SdQSDJzc8joaeP8QQoCQr8NuYx2dIIytl1QeBEZHJ9uW6hebsrYgbz8hJwUQao3TWCMtmfV8Nu1twOLAw==}
 
-  '@klappay/cli@1.4.3':
-    resolution: {integrity: sha512-BILCtA6sHgb8/wn4xlNOpWwoKDnTnqfDHQc+4Nxq4U+rSjEeDlk5CzY7A/xNECzXgGvEhT5HCsILf9Zt5zQzxQ==}
+  '@klappay/cli@1.6.0':
+    resolution: {integrity: sha512-TCkRVMTN+lBwYit5Kkm380YJOuJaep2g4Tsc/njBK/ptTjgoeFCigR2bayk5iJzsdsjyUsgxhZZwvHnk8/hltQ==}
     engines: {node: '>=24'}
     hasBin: true
 
-  '@klappay/node@5.2.0':
-    resolution: {integrity: sha512-npOPCbYXdAMv2wZUjwNu3buhXUMClIeXeNYirHz/8IrjTEkX8Z4sjj0FuLpgJzpiCvBglF3zXIXi5CZSEz6aqA==}
+  '@klappay/node@5.3.0':
+    resolution: {integrity: sha512-LvBOqECpyqhhe0M6LZUwQc4l5zYIbKrrwUdhL4k36PQy9fuh67qCaeuKBOx5NFvv+acGsznraUq9zYULayxXVw==}
     engines: {node: '>=24'}
 
-  '@klappay/types@6.1.0':
-    resolution: {integrity: sha512-8WhPzEwPKROb6DkuXFS15t47OKRbXry5x1P8c7i75L8SPRMihUCY4dqiqcWcu+di0E5awQBtrjfksvX0VdcBHA==}
+  '@klappay/types@6.2.0':
+    resolution: {integrity: sha512-typd65clnphT32f1Llv3+k4tUCC5lMp3NWrPGiexLYRb+9bZf0o82/Wdac0WB5gPcN7eWujhr3kLAAlrCkmdLw==}
     engines: {node: '>=24'}
 
   '@manypkg/find-root@1.1.0':
@@ -3701,18 +3701,18 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.6.0
 
-  '@klappay/cli@1.4.3':
+  '@klappay/cli@1.6.0':
     dependencies:
-      '@klappay/node': 5.2.0
-      '@klappay/types': 6.1.0
+      '@klappay/node': 5.3.0
+      '@klappay/types': 6.2.0
       commander: 13.1.0
       picocolors: 1.1.1
 
-  '@klappay/node@5.2.0':
+  '@klappay/node@5.3.0':
     dependencies:
-      '@klappay/types': 6.1.0
+      '@klappay/types': 6.2.0
 
-  '@klappay/types@6.1.0':
+  '@klappay/types@6.2.0':
     dependencies:
       zod: 3.25.76
 

@@ -1,0 +1,31 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
+  "name": "io.github.klappay/klap-mcp",
+  "title": "Klap",
+  "description": "Read and test crypto payments on the Klap API: charges, webhooks, networks and metrics.",
+  "websiteUrl": "https://mcp.klappay.com",
+  "repository": {
+    "url": "https://github.com/klappay/klap-mcp",
+    "source": "github"
+  },
+  "version": "1.3.0",
+  "packages": [
+    {
+      "registryType": "npm",
+      "identifier": "@klappay/mcp",
+      "version": "1.3.0",
+      "transport": {
+        "type": "stdio"
+      },
+      "environmentVariables": [
+        {
+          "name": "KLAP_ENV",
+          "description": "Which stored key to use: test (default) or live",
+          "isRequired": false,
+          "format": "string",
+          "isSecret": false
+        }
+      ]
+    }
+  ]
+}

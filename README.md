@@ -9,6 +9,8 @@ Nothing is hosted by Klappay: the server talks straight to the Klap API with
 the key [`klap login`](https://github.com/klappay/klap-cli) already stored in
 `~/.klap/config.json`.
 
+Part of [Klap](https://klappay.com), the non-custodial crypto payments API.
+
 What the assistant can do with it:
 
 - **Read**: look up or list charges and a charge's timeline, inspect the

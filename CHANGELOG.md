@@ -1,5 +1,11 @@
 # @klappay/mcp
 
+## 1.3.1
+
+### Patch Changes
+
+- 0aeec30: List the server in the official MCP Registry as `io.github.klappay/klap-mcp`. The package now carries `mcpName`, `server.json` describes it, and every release publishes it to the registry from CI. The README links to klappay.com.
+
 ## 1.3.0
 
 ### Minor Changes

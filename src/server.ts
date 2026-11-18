@@ -8,6 +8,7 @@ import { chargeTools } from './tools/charges'
 import type { ToolDefinition } from './tools/definition'
 import { metricsTools } from './tools/metrics'
 import { networkTools } from './tools/networks'
+import { recipientTools } from './tools/recipients'
 import { sandboxTools } from './tools/sandbox'
 import { statusTools } from './tools/status'
 import { webhookTools } from './tools/webhooks'
@@ -20,6 +21,7 @@ export const ALL_TOOLS: readonly ToolDefinition[] = [
   ...webhookTools,
   ...networkTools,
   ...metricsTools,
+  ...recipientTools,
   ...sandboxTools,
 ]
 

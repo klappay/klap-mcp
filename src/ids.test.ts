@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { ChargeIdSchema, WebhookDeliveryIdSchema, WebhookIdSchema } from './ids'
+import { ChargeIdSchema, RecipientIdSchema, WebhookDeliveryIdSchema, WebhookIdSchema } from './ids'
 
 describe('id schemas', () => {
   it.each(['ch_abc123', 'ch_tz4a98xxat96iws9zmbrgj3a'])('accepts charge id %j', (id) => {
@@ -29,5 +29,7 @@ describe('id schemas', () => {
     expect(WebhookIdSchema.safeParse('ev_abc').success).toBe(false)
     expect(WebhookDeliveryIdSchema.safeParse('ev_abc').success).toBe(true)
     expect(WebhookDeliveryIdSchema.safeParse('wh_abc').success).toBe(false)
+    expect(RecipientIdSchema.safeParse('rc_abc').success).toBe(true)
+    expect(RecipientIdSchema.safeParse('ch_abc').success).toBe(false)
   })
 })

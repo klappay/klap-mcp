@@ -16,7 +16,8 @@ What the assistant can do with it:
 - **Read**: look up or list charges and a charge's timeline, inspect the
   Safe transaction an escrow release/refund would execute, list webhooks
   and their deliveries, list accepted `(token, network)` pairs, run
-  metrics queries.
+  metrics queries, list split recipients and check whether a token issuer
+  restricts their address.
 - **Test mode**: create charges, re-check them on-chain, retry webhook
   deliveries and push a sandbox charge through its payment states.
 - **Live mode**: read-only by default. Writes are only registered when
@@ -98,6 +99,8 @@ An empty value counts as unset. Full rules: [Configuration](./docs/configuration
 | `webhooks_list_deliveries` | yes | yes | yes |
 | `networks_get` | yes | yes | yes |
 | `metrics_query` | yes | yes | yes |
+| `recipients_list` | yes | yes | yes |
+| `recipients_transferability` | yes | yes | yes |
 | `charges_create` | yes | no | yes |
 | `charges_check` | yes | no | yes |
 | `webhooks_retry_delivery` | yes | no | yes |
@@ -114,7 +117,8 @@ described in [Tools](./docs/tools.md).
 - Plain `http://` is only accepted for `localhost`, `127.0.0.1` and `[::1]`.
 - API responses are filtered through the published `@klappay/types`
   schemas before the assistant sees them; unknown fields are dropped and a
-  charge's `metadata` is left out unless asked for.
+  charge's `metadata` and the `label` in `recipients_list` are left out
+  unless asked for.
 - Not available at all: escrow `release`/`refund` (only their read-only
   `prepare` step is), webhook
   create/delete/rotate-secret, recipient changes, live event streams, QR

@@ -16,7 +16,7 @@ export const sandboxTools: ToolDefinition[] = [
         {
           title: 'Simulate sandbox charge event',
           description:
-            'Push a test charge into a payment state (confirmed, partially paid, overpaid, expired, underpaid, settled, settlement failed) without moving funds, and fire the matching webhook. Test environment only.',
+            'Push a test charge into a payment state (confirmed, partially paid, overpaid, expired, underpaid, settled, settlement failed, settlement below minimum) without moving funds, and fire the matching webhook. Test environment only.',
           inputSchema: SandboxTriggerInputSchema,
           annotations: {
             readOnlyHint: false,

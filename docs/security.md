@@ -48,7 +48,13 @@ independently.
   reported as `unexpected_response`, not forwarded.
 - A charge's `metadata` (free-form merchant data, possibly customer
   details) is only included when `charges_get` or `charges_list` is
-  called with `includeMetadata: true`.
+  called with `includeMetadata: true`. `recipients_list` likewise leaves out
+  each `label` (free-form text, which may name a person) unless called with
+  `includeLabels: true`. A charge's `splitRecipients` does include the label
+  set on each entry.
+- `recipients_list`, `recipients_transferability` and a `below_minimum`
+  charge's `selfSettlement` show payout addresses. They are read-only, and
+  nothing in this server can change where money goes.
 - Webhook URLs are reduced to origin + path, removing credentials and
   tokens people often put in a URL's userinfo or query string.
 - Unexpected errors return a generic message; details go to stderr for you,

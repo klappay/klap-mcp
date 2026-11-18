@@ -12,7 +12,11 @@ import {
 import { z } from 'zod'
 import { ChargeIdSchema } from '../ids'
 import { ToolInputError, runTool } from '../result'
-import { ChargeWithoutMetadataSchema, PaginatedChargesWithoutMetadataSchema } from './charge-output'
+import {
+  CHARGE_AMOUNTS_NOTE,
+  ChargeWithoutMetadataSchema,
+  PaginatedChargesWithoutMetadataSchema,
+} from './charge-output'
 import type { ToolDefinition } from './definition'
 
 const CheckResponseWithoutMetadataSchema = CheckChargeResponseSchema.omit({ metadata: true })
@@ -79,8 +83,7 @@ export const chargeTools: ToolDefinition[] = [
         'charges_get',
         {
           title: 'Get charge',
-          description:
-            'Fetch one charge by id: status, settlement status, amounts, accepted payment pairs, split recipients and timestamps. `metadata` is left out unless includeMetadata is true.',
+          description: `Fetch one charge by id: status, settlement status, amounts, accepted payment pairs, split recipients and timestamps. ${CHARGE_AMOUNTS_NOTE} When settlementStatus is below_minimum, gas would exceed the payout so Klap sent nothing, and \`selfSettlement\` holds the split terms for settling it on-chain. \`metadata\` is left out unless includeMetadata is true.`,
           inputSchema: GetChargeInputSchema,
           annotations: { readOnlyHint: true, openWorldHint: true },
         },
@@ -101,8 +104,7 @@ export const chargeTools: ToolDefinition[] = [
         'charges_list',
         {
           title: 'List charges',
-          description:
-            "List this environment's charges, newest first, optionally filtered by status, paid token/network, creation time (since) or isOverpaid. Paginate with limit and the previous page's nextCursor. `metadata` is left out unless includeMetadata is true.",
+          description: `List this environment's charges, newest first, optionally filtered by status, paid token/network, creation time (since) or isOverpaid. Paginate with limit and the previous page's nextCursor. ${CHARGE_AMOUNTS_NOTE} \`metadata\` is left out unless includeMetadata is true.`,
           inputSchema: ListChargesInputSchema,
           annotations: { readOnlyHint: true, openWorldHint: true },
         },
@@ -146,7 +148,7 @@ export const chargeTools: ToolDefinition[] = [
         'charges_create',
         {
           title: 'Create charge',
-          description: `Create a new ${environment} charge. Escrow charges and redirectUrl are not available through this server. Pass idempotencyKey to make a retry safe; without it every call creates a new charge.`,
+          description: `Create a new ${environment} charge. ${CHARGE_AMOUNTS_NOTE} Escrow charges and redirectUrl are not available through this server. Pass idempotencyKey to make a retry safe; without it every call creates a new charge.`,
           inputSchema: CreateChargeToolInputSchema,
           annotations: {
             readOnlyHint: false,

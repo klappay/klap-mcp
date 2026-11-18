@@ -52,6 +52,8 @@ Ask the assistant things like:
 - "Which of my webhooks failed deliveries recently?" (`webhooks_list`,
   `webhooks_list_deliveries`)
 - "List my pending charges from the last day." (`charges_list`)
+- "Why was this recipient rejected on my charge?" (`recipients_list`,
+  `recipients_transferability`)
 
 ## 4. Add live (optional)
 

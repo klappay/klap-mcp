@@ -15,3 +15,4 @@ function prefixedIdSchema(prefix: string, label: string) {
 export const ChargeIdSchema = prefixedIdSchema('ch', 'charge')
 export const WebhookIdSchema = prefixedIdSchema('wh', 'webhook')
 export const WebhookDeliveryIdSchema = prefixedIdSchema('ev', 'webhook delivery')
+export const RecipientIdSchema = prefixedIdSchema('rc', 'recipient')

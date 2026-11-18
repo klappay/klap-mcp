@@ -8,8 +8,8 @@ match at all becomes an `unexpected_response` error instead of being passed
 through.
 
 Ids are checked before any request is sent: charge ids look like `ch_...`,
-webhook ids `wh_...`, delivery ids `ev_...`, followed by letters and digits
-only.
+webhook ids `wh_...`, delivery ids `ev_...`, recipient ids `rc_...`,
+followed by letters and digits only.
 
 ## Errors
 
@@ -48,6 +48,19 @@ Returns `{ charge }` (`ChargeSchema`). The charge's `metadata` object
 (free-form merchant data, which may contain customer details) is left out
 unless `includeMetadata` is `true`.
 
+`amount` is what the payer sends and already includes `gasFeeAmount`, the
+network gas fee the payer covers, so it can be higher than the amount asked
+for. `requestedAmount` is the amount asked for at creation (`null` on older
+charges), and `amount` always equals `merchantAmount + feeAmount +
+gasFeeAmount`. A transfer below the payment minimum (0.10 live, 0.01 test)
+doesn't count toward `amountReceived` unless it completes the charge.
+
+When `settlementStatus` is `below_minimum`, the funds haven't covered the gas
+to pay out, so Klap sent nothing. The charge then carries `selfSettlement`:
+the split address, its recipients and shares, the distributor fee, the salt
+and the affected `(network, token)` pairs. This server doesn't settle
+anything on-chain; these are the terms someone would use to do it themselves.
+
 ### `charges_list`
 
 | Input | |
@@ -84,6 +97,34 @@ These are read-only: nothing is signed or submitted, and `release`/
 [Security](./security.md#excluded-on-purpose)). The API key needs the
 `charges:write` scope even though the call changes nothing. API errors
 such as `422 escrow_safe_mismatch` come back as a normal error result.
+
+### `recipients_list`
+
+| Input | |
+|---|---|
+| `limit` | 1–100, default 20 |
+| `cursor` | the previous page's `nextCursor` |
+| `includeLabels` | boolean, default `false` |
+
+Returns `{ data, nextCursor, hasMore }` (`PaginatedRecipientsSchema`) with this
+environment's non-revoked recipients, newest first. Each `label` (free-form
+merchant text, which may name a person) is left out unless `includeLabels`
+is `true`. The API key needs the `recipients:read` scope. Registering,
+changing or revoking a recipient is not available through this server (see
+[Security](./security.md#excluded-on-purpose)).
+
+### `recipients_transferability`
+
+Input `{ id }` of a recipient. Returns `{ recipientId, address, pairs }`
+(`RecipientTransferabilitySchema`). For each token/network pair enabled in
+this environment, `receive` says whether the address can be credited and
+`send` whether it can move funds out. Each is `allowed`, `restricted` or
+`unknown`, read from the token issuer's own contract. `pairs` is empty for a
+TRON address.
+
+Use it to explain a `422 recipient_transfer_restricted` from `charges_create`,
+which only happens when `receive` is `restricted`. The API key needs the
+`recipients:read` scope.
 
 ### `webhooks_list`
 
@@ -125,7 +166,15 @@ Annotated `readOnlyHint: false`.
 Input is `CreateChargeSchema` without `escrow` and `redirectUrl`; sending
 either is rejected. Pass `idempotencyKey` to make a retry safe; without it
 every call creates a new charge. Returns `{ charge }` without `metadata`
-(including `amount`, `acceptedPayments` and `splitRecipients`).
+(including `amount`, `acceptedPayments` and `splitRecipients`). The
+returned `amount` includes `gasFeeAmount`, so show that to the payer rather
+than the amount you passed.
+
+A charge that accepts `ethereum` can't accept any other network; mixing them
+is rejected before any request is sent. API errors such as
+`422 amount_below_minimum` (below 0.10 live, 5.00 live on `ethereum`, 0.01
+test), `422 recipient_transfer_restricted` and `503 gas_quote_unavailable`
+come back as a normal error result.
 
 Annotations: `destructiveHint: false`, `idempotentHint: false`.
 
@@ -167,7 +216,7 @@ Test environment only, never registered in live.
 | Input | |
 |---|---|
 | `chargeId` | charge id |
-| `event` | `charge.confirmed`, `charge.partially_paid`, `charge.overpaid`, `charge.expired`, `charge.underpaid`, `charge.settled` or `charge.settlement_failed` |
+| `event` | `charge.confirmed`, `charge.partially_paid`, `charge.overpaid`, `charge.expired`, `charge.underpaid`, `charge.settled`, `charge.settlement_failed` or `charge.settlement_below_minimum` |
 | `amount` | optional, for `charge.partially_paid`/`charge.overpaid` |
 
 Returns `{ charge }` without `metadata`. Annotations: `destructiveHint: true`

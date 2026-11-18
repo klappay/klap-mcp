@@ -46,9 +46,9 @@
     "prepare": "husky"
   },
   "dependencies": {
-    "@klappay/cli": "^1.6.0",
-    "@klappay/node": "^5.3.0",
-    "@klappay/types": "6.2.0",
+    "@klappay/cli": "^1.7.0",
+    "@klappay/node": "^5.4.0",
+    "@klappay/types": "7.0.0",
     "@modelcontextprotocol/sdk": "1.32.1",
     "zod": "3.25.76"
   },
